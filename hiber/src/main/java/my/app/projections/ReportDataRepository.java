@@ -14,11 +14,10 @@ import javax.persistence.criteria.Root;
 public class ReportDataRepository extends SimpleJpaRepository<ReportData, Long> {
 
     @PersistenceContext
-    protected final EntityManager entityManager;
+    private EntityManager entityManager;
 
     public ReportDataRepository(EntityManager em) {
         super(ReportData.class, em);
-        this.entityManager = em;
     }
 
     public ReportDTO fillDTO(Long id){
