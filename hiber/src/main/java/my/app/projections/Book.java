@@ -1,11 +1,13 @@
 package my.app.projections;
 
+import my.app.deepGraphGenericEntities.ModificationAndVerificationAware;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class ReportData {
+public class Book extends ModificationAndVerificationAware {
 
     @Id
     private long id;

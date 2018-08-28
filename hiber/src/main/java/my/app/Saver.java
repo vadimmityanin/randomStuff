@@ -1,87 +1,87 @@
 package my.app;
 
-import my.app.model.Profile;
-import my.app.model.SourceProfile;
-import my.app.model.Wealth;
+import my.app.deepGraphGenericEntities.MaritalStatus;
+import my.app.deepGraphGenericEntities.SocialInformation;
+import my.app.deepGraphGenericEntities.SourceProfile;
+import my.app.jsonb.Docz;
+import my.app.jsonb.MyJsonchik;
 import my.app.onetomany.bidirectional.Floor;
 import my.app.onetomany.bidirectional.Home;
 import my.app.onetomany.unidirectional.manyside.Eye;
 import my.app.onetomany.unidirectional.manyside.Man;
 import my.app.onetomany.unidirectional.oneside.Post;
 import my.app.onetomany.unidirectional.oneside.Uzer;
-import org.springframework.beans.factory.annotation.Autowired;
+import my.app.projections.Book;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 @Component
 public class Saver {
     //    @Autowired
 //    private LongProfileFieldRepository longProfileFieldRepository;
-    @Autowired
-    private SourceProfileRepository sourceProfileRepository;
+//    @Autowired
+//    private SourceProfileRepository sourceProfileRepository;
 
-    @Autowired
-    private WealthRepository wealthRepository;
+//    @Autowired
+//    private WealthRepository wealthRepository;
 
     @PersistenceContext
     private EntityManager em;
 
-    @Transactional
-    public Long go() {
-
-        Profile profile = new Profile();
-        profile.setNameOfProfile("profilezz");
-        em.persist(profile);
-
-        SourceProfile sourceProfile = new SourceProfile(null, "valera");
-        Wealth wealth = new Wealth();
-
-        try {
-            wealth.setValue(new URL("http://ukr.net"));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        sourceProfile.setProfile(profile);
-        SourceProfile sourceProfileSaved = sourceProfileRepository.save(sourceProfile);
-
-//        sourceProfile.setWealth(wealth);
-        wealth.setSourceProfile(sourceProfile);
-        Wealth savedWealth = wealthRepository.save(wealth);
-
-
-        em.flush();
-//        Long id = sourceProfileSaved.getWealth().getId();
-        wealthRepository.deleteById(savedWealth.getId());
-
-        System.err.println("done");
-        return savedWealth.getId();
-
-    }
-
 //    @Transactional
-//    public void del(Long spID) {
-//        wealthRepository.deleteById(spID);
+//    public Long go() {
+//
+//        Profile profile = new Profile();
+//        profile.setNameOfProfile("profilezz");
+//        em.persist(profile);
+//
+//        SourceProfile sourceProfile = new SourceProfile(null, "valera");
+//        Wealth wealth = new Wealth();
+//
+//        try {
+//            wealth.setValue(new URL("http://ukr.net"));
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        sourceProfile.setProfile(profile);
+//        SourceProfile sourceProfileSaved = sourceProfileRepository.save(sourceProfile);
+//
+////        sourceProfile.setWealth(wealth);
+//        wealth.setSourceProfile(sourceProfile);
+//        Wealth savedWealth = wealthRepository.save(wealth);
+//
+//
+//        em.flush();
+////        Long id = sourceProfileSaved.getWealth().getId();
+//        wealthRepository.deleteById(savedWealth.getId());
+//
+//        System.err.println("done");
+//        return savedWealth.getId();
+//
 //    }
-
-    @Transactional
-    public void puff() {
-        SourceProfile sourceProfile = new SourceProfile(null, "valera");
-        em.persist(sourceProfile);
-
-        Wealth wealth = new Wealth();
-        wealth.setSourceProfile(sourceProfile);
-        wealth.setValue(null);
-//        Wealth allById = wealthRepository.findAllById(2L);
-//        System.err.println(allById.getId());
-//        wealthRepository.deleteById(2L);
-        wealthRepository.save(wealth);
-    }
+//
+////    @Transactional
+////    public void del(Long spID) {
+////        wealthRepository.deleteById(spID);
+////    }
+//
+//    @Transactional
+//    public void puff() {
+//        SourceProfile sourceProfile = new SourceProfile(null, "valera");
+//        em.persist(sourceProfile);
+//
+//        Wealth wealth = new Wealth();
+//        wealth.setSourceProfile(sourceProfile);
+//        wealth.setValue(null);
+////        Wealth allById = wealthRepository.findAllById(2L);
+////        System.err.println(allById.getId());
+////        wealthRepository.deleteById(2L);
+//        wealthRepository.save(wealth);
+//    }
 
 
     @Transactional
@@ -193,4 +193,40 @@ public class Saver {
 
 
     }
+
+    @Transactional
+    public void checkEmb() {
+        SourceProfile sourceProfile = new SourceProfile();
+        SocialInformation socialInformation = new SocialInformation();
+        em.persist(sourceProfile);
+        em.flush();
+
+        MaritalStatus maritalStatus = new MaritalStatus();
+        maritalStatus.setValue("SIXTYSIX");
+        socialInformation.setMaritalStatus(maritalStatus);
+        sourceProfile.setSocialInformation(socialInformation);
+        maritalStatus.setSourceProfile(sourceProfile);
+        em.persist(sourceProfile);
+    }
+    @Transactional
+    public void checkEmb2() {
+        Book book = new Book();
+        book.setId(5L);
+        book.setCity("her");
+        book.setName("na");
+        book.setSeats(5_000);
+        em.persist(book);
+    }
+
+    @Transactional
+    public void jsnob() {
+        MyJsonchik myJsonchik = new MyJsonchik();
+        myJsonchik.setName("vadim");
+        myJsonchik.setSurname("mitya");
+        Docz docz = new Docz();
+        docz.setJsonchik(myJsonchik);
+        docz.setId(5L);
+        em.persist(docz);
+    }
+
 }
