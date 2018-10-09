@@ -1,34 +1,11 @@
 package my.app.projections;
 
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.CrudRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import java.util.List;
 
-@Repository
-public class BookRepository extends SimpleJpaRepository<Book, Long> {
+public interface BookRepository extends CrudRepository<Book, Long>, BookRepositoryCustom {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    public BookRepository(EntityManager em) {
-        super(Book.class, em);
-    }
-
-    public ReportDTO fillDTO(Long id){
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<ReportDTO> cbQuery = cb.createQuery(ReportDTO.class);
-        Root<Book> root = cbQuery.from(Book.class);
-        cbQuery.multiselect(
-                root.get(Book_.id),
-                root.get(Book_.city));
-        Predicate equality = cb.equal(root.get(Book_.id), id);
-        cbQuery.where(equality);
-        return entityManager.createQuery(cbQuery).getSingleResult();
-    }
+    List<Book> findAllByCity(String city);
+    List<String> findNameById(Long id);
 }

@@ -1,20 +1,33 @@
 package my.app.projections;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringJoiner;
 
 @Entity
 public class Author {
     @Id
-    private long id;
+    private Long id;
     @Column
     private String name;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    private List<Book> books = new ArrayList<>();
+
+    public void addBook(Book b){
+        books.add(b);
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
 
     public Author() {
     }
 
-    public Author(long id, String name) {
+    public Author(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -23,7 +36,7 @@ public class Author {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -33,5 +46,14 @@ public class Author {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Author.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("name='" + name + "'")
+                .add("books=" + books)
+                .toString();
     }
 }

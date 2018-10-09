@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
 
 @Entity
 public class Home {
@@ -12,7 +13,9 @@ public class Home {
     @GeneratedValue
     private long id;
 
-    @OneToMany(mappedBy = "home", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "home",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Set<Floor> floors = new HashSet<>();
 
     public Home(long id) {
@@ -59,5 +62,13 @@ public class Home {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Home.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+//                .add("floors=" + floors)
+                .toString();
     }
 }

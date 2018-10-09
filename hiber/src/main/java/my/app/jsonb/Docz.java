@@ -20,7 +20,7 @@ public class Docz {
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    private MyJsonchik jsonchik;
+    private Signed jsonchik;
 
     public long getId() {
         return id;
@@ -30,11 +30,11 @@ public class Docz {
         this.id = id;
     }
 
-    public MyJsonchik getJsonchik() {
+    public Signed getJsonchik() {
         return jsonchik;
     }
 
-    public void setJsonchik(MyJsonchik jsonchik) {
+    public void setJsonchik(Signed jsonchik) {
         this.jsonchik = jsonchik;
     }
 }

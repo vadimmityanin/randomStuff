@@ -5,12 +5,13 @@ import my.app.deepGraphGenericEntities.ModificationAndVerificationAware;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.StringJoiner;
 
 @Entity
 public class Book extends ModificationAndVerificationAware {
 
     @Id
-    private long id;
+    private Long id;
     @Column
     private String city;
     @Column
@@ -23,7 +24,7 @@ public class Book extends ModificationAndVerificationAware {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -49,5 +50,15 @@ public class Book extends ModificationAndVerificationAware {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Book.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("city='" + city + "'")
+                .add("seats=" + seats)
+                .add("name='" + name + "'")
+                .toString();
     }
 }

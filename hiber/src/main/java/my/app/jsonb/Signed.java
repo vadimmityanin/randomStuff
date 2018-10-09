@@ -1,6 +1,6 @@
 package my.app.jsonb;
 
-public class MyJsonchik {
+public class Signed {
 
     private String name;
 

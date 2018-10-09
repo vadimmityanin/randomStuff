@@ -1,22 +1,18 @@
 package my;
 
 import my.app.Saver;
-import my.app.projections.Book;
-import my.app.projections.BookRepository;
-import my.app.projections.ReportDTO;
+import my.app.onetomany.bidirectional.HomeService;
+import my.app.onetomany.bidirectional.Pr;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.data.domain.Page;
 
 import javax.persistence.EntityManager;
 
 @SpringBootApplication
-public class SampleProjectJavaApplication extends WebSecurityConfigurerAdapter {
+public class SampleProjectJavaApplication {
 
-    public static <T> void mmm(T dto) {
-        System.err.println(dto.getClass());
-    }
 
     public static void main(String[] args) throws Exception {
 
@@ -24,9 +20,18 @@ public class SampleProjectJavaApplication extends WebSecurityConfigurerAdapter {
         Saver saver = context.getBean(Saver.class);
         EntityManager em = context.getBean(EntityManager.class);
 
-        saver.jsnob();
+//        System.err.println(context.getBean(CtrlAdvice.class));
+//        saver.prep();
+//        saver.manyToManyProjections();
+        saver.oneToManyBIdirect();
+        saver.oneToManyBIdirect2();
+        saver.oneToManyBIdirect3();
 
-
+        System.err.println("MMMMMM");
+        HomeService repo = context.getBean(HomeService.class);
+        System.err.println("illgoing=-----");
+        Page<Pr> prs = repo.go2();
+        System.err.println(prs.getContent());
     }
 
 

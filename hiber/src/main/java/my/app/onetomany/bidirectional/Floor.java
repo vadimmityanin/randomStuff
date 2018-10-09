@@ -3,8 +3,6 @@ package my.app.onetomany.bidirectional;
 import javax.persistence.*;
 import java.util.Objects;
 
-import static java.util.Optional.ofNullable;
-import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -14,7 +12,7 @@ public class Floor {
     @GeneratedValue
     private long id;
 
-    @ManyToOne(fetch = LAZY, cascade = {PERSIST, REFRESH, DETACH, MERGE})
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "home_id")
     private Home home;
 
@@ -38,12 +36,6 @@ public class Floor {
     }
 
     public void setHome(Home home) {
-        ofNullable(this.home)
-                .filter(currentHome -> !currentHome.equals(home))
-                .ifPresent(currentHome -> currentHome.getFloors().remove(this));
-        ofNullable(home)
-                .filter(newHome -> !newHome.equals(this.home))
-                .ifPresent(newHome -> newHome.getFloors().add(this));
         this.home = home;
 
     }
