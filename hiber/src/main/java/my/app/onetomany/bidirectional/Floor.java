@@ -1,11 +1,18 @@
 package my.app.onetomany.bidirectional;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Floor {
 
     @Id
@@ -13,32 +20,11 @@ public class Floor {
     private long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "home_id")
+//    @JoinColumn(name = "home_id")
     private Home home;
 
-    public Floor(long id) {
-        this.id = id;
-    }
-
-    public Floor() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Home getHome() {
-        return home;
-    }
-
-    public void setHome(Home home) {
-        this.home = home;
-
-    }
+    @Column
+    private String name;
 
 
 //    public void setHomerrrrr(Home home) {

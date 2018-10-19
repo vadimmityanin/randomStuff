@@ -1,54 +1,54 @@
 package my.app.onetomany.bidirectional;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Home {
 
     @Id
     @GeneratedValue
     private long id;
 
-    @OneToMany(mappedBy = "home",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private Set<Floor> floors = new HashSet<>();
+//    @OneToMany(mappedBy = "home",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true)
+//    private Set<Floor> floors = new HashSet<>();
 
-    public Home(long id) {
-        this.id = id;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UnitDepartment department;
 
-    public Home() {
-    }
+    @Column
+    private UUID code;
 
-    public void addFloor(Floor floor){
-        Objects.requireNonNull(floor,"Floor can't be null.");
-        floor.setHome(this);
-        floors.add(floor);
-    }
-
-    public void removeFloor(Floor floor){
-        Objects.requireNonNull(floor,"Floor can't be null.");
-        floor.setHome(null);
-        floors.remove(floor);
-    }
+    @Column
+    private String name;
 
 
-    public long getId() {
-        return id;
-    }
+//    public void addFloor(Floor floor){
+//        Objects.requireNonNull(floor,"Floor can't be null.");
+//        floor.setHome(this);
+//        floors.add(floor);
+//    }
+//
+//    public void removeFloor(Floor floor){
+//        Objects.requireNonNull(floor,"Floor can't be null.");
+//        floor.setHome(null);
+//        floors.remove(floor);
+//    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
-    public Set<Floor> getFloors() {
-        return floors;
-    }
 
 
     @Override

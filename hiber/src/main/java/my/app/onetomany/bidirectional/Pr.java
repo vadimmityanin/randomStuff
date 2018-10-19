@@ -6,5 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Pr {
-    private Long st;
+    private Long id;
+    private String name;
 }

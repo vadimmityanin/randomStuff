@@ -11,12 +11,8 @@ import my.app.idsswap.ArrRepository;
 import my.app.jsonb.DTOz;
 import my.app.jsonb.Docz;
 import my.app.jsonb.Signed;
-import my.app.manytomany.Batch;
-import my.app.manytomany.Document;
-import my.app.manytomany.Item;
-import my.app.manytomany.Transaction;
-import my.app.onetomany.bidirectional.Floor;
-import my.app.onetomany.bidirectional.Home;
+import my.app.manytomany.*;
+import my.app.onetomany.bidirectional.*;
 import my.app.onetomany.unidirectional.manyside.Eye;
 import my.app.onetomany.unidirectional.manyside.Man;
 import my.app.onetomany.unidirectional.oneside.Post;
@@ -33,6 +29,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.UUID;
+
+//import my.app.manytomany.ItemRepository;
 
 @Component
 public class Saver {
@@ -55,6 +55,13 @@ public class Saver {
 
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private DocumentRepositoryCustom documentRepositoryCustom;
+
+
+
+//    @Autowired
+//    private ItemRepository itemRepository;
 //    @Transactional
 //    public Long go() {
 //
@@ -153,50 +160,74 @@ public class Saver {
     @Transactional
     public void oneToManyBIdirect() {
         Home home = new Home();
-        Floor floor = new Floor();
-        Floor floor2 = new Floor();
-        Floor floor3 = new Floor();
+        home.setName("SWEETHOME");
+        home.setCode(UUID.fromString("b9a20376-cc5f-11e8-a8d5-f2801f1b9fd1"));
+
+        Unit u = Unit.builder().id(100L).name("unia").build();
+        em.persist(u);
+        Unit u1 = Unit.builder().id(101L).name("unia101L").build();
+        em.persist(u1);
+        Unit u2 = Unit.builder().id(102L).name("unia102L").build();
+        em.persist(u2);
+
+        UnitDepartment depttt = UnitDepartment.builder().id(88L).name("depttt").unit(u).build();
+        em.persist(depttt);
+
+        home.setDepartment(depttt);
+
+        em.persist(home);
+
+        Floor floor = Floor.builder().name("aska").home(home).build();
+        Floor floor2 =  Floor.builder().name("aska").home(home).build();
+        Floor floor3 =  Floor.builder().name("aska").home(home).build();
         em.persist(floor);
         em.persist(floor2);
         em.persist(floor3);
         System.err.println("------------floors saved");
 //        floor.setHome(home);
 //        floor2.setHome(home);
-        em.persist(home);
+
         em.flush();
 //        System.err.println(home.getFloors());
         System.err.println("---done---1");
 
     }
+
     @Transactional
     public void oneToManyBIdirect2() {
         Floor floor1 = em.getReference(Floor.class, 1L);
         Floor floor2 = em.getReference(Floor.class, 2L);
         Floor floor3 = em.getReference(Floor.class, 3L);
         Home home = em.find(Home.class, 4L);
-home.addFloor(floor1);
-home.addFloor(floor2);
-home.addFloor(floor3);
+//        home.addFloor(floor1);
+//        home.addFloor(floor2);
+//        home.addFloor(floor3);
+
+        Master hasreturned = Master.builder().name("hasreturned").home(home).build();
+        em.persist(hasreturned);
+        Home home2 = Home.builder().build();
+        em.persist(home2);
         System.err.println("---done2---");
     }
+
     @Transactional
     public void oneToManyBIdirect3() {
         Home home = em.find(Home.class, 4L);
-        System.err.println(home.getFloors());
+//        System.err.println(home.getFloors());
     }
 
     @Transactional
     public void oneToManyBIdirectTEST(long createdFloorId) {
         System.err.println("---");
-        System.err.println(em.find(Home.class, 1L).getFloors());
+//        System.err.println(em.find(Home.class, 1L).getFloors());
 
         Floor previouslySavedFloor = em.find(Floor.class, 11L);
-        Home newHome = new Home(2L);
+        Home newHome = Home.builder().id(2L).build();
 
-        previouslySavedFloor.setHome(null);
+//        previouslySavedFloor.setHome(null);
         em.persist(previouslySavedFloor);
         em.flush();
-        System.err.println(em.find(Home.class, 1L).getFloors());
+//        System.err.println(em.find(Home.class, 1L).getFloors());
         System.err.println("---");
 
 
@@ -207,7 +238,7 @@ home.addFloor(floor3);
 
         Home home = em.find(Home.class, 1L);
 
-        System.err.println(home.getFloors());
+//        System.err.println(home.getFloors());
 
 
     }
@@ -219,11 +250,11 @@ home.addFloor(floor3);
         Home home = new Home();
         Floor floor = new Floor();
 
-        home.addFloor(floor);
+//        home.addFloor(floor);
 
         em.persist(home);
 
-        System.err.println(home.getFloors());
+//        System.err.println(home.getFloors());
 
 
     }
@@ -233,11 +264,11 @@ home.addFloor(floor3);
 
         Home home = em.find(Home.class, 1L);
 
-        home.removeFloor(new Floor(2L));
+//        home.removeFloor(new Floor(2L));
 
         em.persist(home);
 
-        System.err.println(home.getFloors());
+//        System.err.println(home.getFloors());
 
 
     }
@@ -402,25 +433,76 @@ home.addFloor(floor3);
         Batch batch1 = Batch.builder().name("batch1").build();
         Batch batch2 = Batch.builder().name("batch2").parent(batch1).build();
 
-        Item item1 = Item.builder().name("item1").batch(batch1).build();
-        Item item2 = Item.builder().name("item2").batch(batch2).build();
+//        Item item1 = Item.builder().name("item1").batch(batch1).build();
+//        Item item2 = Item.builder().name("item2").batch(batch2).build();
 
-        Document doc1 = Document.builder().name("doc1").build();
+        Dj shpari = Dj.builder().name("shpari").build();
+        em.persist(shpari);
+
+        Document doc1 = Document.builder()
+                .date(LocalDate.now())
+        .code(UUID.fromString("7289ca68-cf17-11e8-a8d5-f2801f1b9fd1")).name("doc1").dj(shpari)
+                        .build();
+        Document doc2 = Document.builder().name("doc2").build();
+//        Document doc3 = Document.builder().name("doc3").build();
         doc1.getBatches().add(batch1);
         doc1.getBatches().add(batch2);
-        doc1.getItems().add(item1);
-        doc1.getItems().add(item2);
+        doc2.getBatches().add(batch1);
+//        doc1.getItems().add(item1);
+//        doc1.getItems().add(item2);
 
-        Transaction tx1 = Transaction.builder().name("tx1").build();
-        tx1.setDocument(doc1);
+//        Transaction tx1 = Transaction.builder().name("tx1").build();
+//        tx1.setDocument(doc1);
 
         em.persist(batch1);
         em.persist(batch2);
-        em.persist(item1);
-        em.persist(item2);
+//        em.persist(item1);
+//        em.persist(item2);
         em.persist(doc1);
-        em.persist(tx1);
 
+        em.persist(doc2);
+//        em.persist(tx1);
 
+    }
+    @Transactional
+    public void batches2() throws Exception {
+//        Document document = em.find(Document.class, 3L);
+//        Set<Batch> batches = document.getBatches();
+//        System.err.println(batches);
+//        documentRepositoryCustom.removeBatchFromDocument(3L,1L);
+//        System.err.println(batches);
+
+    }
+
+    @Transactional
+    public void batches3() throws Exception {
+//        Document document = em.find(Document.class, 3L);
+//        Set<Batch> batches = document.getBatches();
+//        System.err.println(batches);
+    }
+
+    @Transactional
+    public void testmanytomanyLaziness() throws Exception {
+        Item i1 = Item.builder().name("i1").build();
+        Document doc1 = Document.builder().name("doc1").build();
+        Document doc2 = Document.builder().name("doc2").build();
+        i1.addDocument(doc1);
+        i1.addDocument(doc2);
+        em.persist(i1);
+        System.err.println("docs and items saved----");
+        Batch batchuga = Batch.builder().name("batchuga").build();
+em.persist(batchuga);
+i1.setBatch(batchuga);
+    }
+    @Transactional
+    public void fetchMTM() throws Exception {
+//        itemRepository.findById(1L);
+        System.err.println("ales");
+        System.err.println("-------");
+        Document document = em.find(Document.class, 2L);
+        System.err.println(        document.getItems());
+        System.err.println("---2222---");
+        Item item = em.find(Item.class, 1L);
+        System.err.println(item);
     }
 }

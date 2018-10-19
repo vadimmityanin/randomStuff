@@ -20,6 +20,6 @@ public class HomeService {
     public Page<Pr> go2() {
         QHome home = QHome.home;
         BooleanExpression eq = QHome.home.id.eq(4L);
-        return homeRepository.findAllDTOs(eq, PageRequest.of(0,4), Projections.constructor(Pr.class, home.id));
+        return homeRepository.findDTOsPage(eq, PageRequest.of(0,4), Projections.constructor(Pr.class, home.id));
     }
 }
